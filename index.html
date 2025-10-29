@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>CNC AI — CNC Router & Laser Engraving & 3D Printing</title>
+    
+    <!-- المكتبات -->
+    <script src="https://docs.opencv.org/4.8.0/opencv.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    
+    <!-- الأنماط -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/tabs.css">
+    <link rel="stylesheet" href="css/debug.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="app">
+        <!-- الهيكل الأساسي للواجهة -->
+        <header>
+            <h1>CNC AI — CNC Router & Laser Engraving & 3D Printing</h1>
+            <div id="cvState">
+                <span class="loading"></span>
+                <span class="version-string">CncAi — النسخة المستقرة 2.2d</span>
+                جاري تحميل OpenCV...
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- اللوحة اليسرى -->
+            <div class="panel left-panel">
+                <!-- عناصر تحميل الملفات -->
+                <!-- أزرار التبويبات -->
+                <!-- محتويات التبويبات -->
+            </div>
+
+            <!-- اللوحة اليمنى -->
+            <div class="panel right-panel">
+                <!-- إعدادات الماكينة -->
+                <!-- إعدادات متقدمة -->
+                <!-- مخرجات G-code -->
+            </div>
+        </div>
+    </div>
+
+    <!-- المكونات الإضافية -->
+    <div class="progress-overlay" id="progressOverlay">
+        <div class="progress-spinner"></div>
+        <div class="progress-text" id="progressText">جاري المعالجة...</div>
+    </div>
+
+    <!-- نظام التصحيح -->
+    <div id="cnc-debug-overlay" class="collapsed">
+        <!-- محتوى نظام التصحيح -->
+    </div>
+    <button id="cnc-debug-btn" aria-label="Open debug">🐞</button>
+
+    <div id="toast"></div>
+
+    <!-- السكربتات -->
+    <script src="js/utils.js"></script>
+    <script src="js/debug-system.js"></script>
+    <script src="js/opencv-handler.js"></script>
+    <script src="js/file-handlers.js"></script>
+    <script src="js/gcode-generator.js"></script>
+    <script src="js/three-viewer.js"></script>
+    <script src="js/simulation.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
