@@ -1,74 +1,86 @@
 <!doctype html>
+<!-- CncAi — Modular Stable 3.0 | Fixed Paths for GitHub Pages -->
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <title>CNC AI — CNC Router & Laser Engraving & 3D Printing</title>
-    
-    <!-- المكتبات -->
-    <script src="https://docs.opencv.org/4.8.0/opencv.js" async></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
-    
-    <!-- الأنماط -->
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/tabs.css">
-    <link rel="stylesheet" href="css/debug.css">
-    <link rel="stylesheet" href="css/responsive.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CncAi — Modular Stable 3.0</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- مكتبات خارجية -->
+  <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 </head>
 <body>
-    <div class="app">
-        <!-- الهيكل الأساسي للواجهة -->
-        <header>
-            <h1>CNC AI — CNC Router & Laser Engraving & 3D Printing</h1>
-            <div id="cvState">
-                <span class="loading"></span>
-                <span class="version-string">CncAi — النسخة المستقرة 2.2d</span>
-                جاري تحميل OpenCV...
-            </div>
-        </header>
+  <header style="background:#121417;padding:10px;text-align:center;color:#7ef2a3;font-weight:bold;">
+    ⚙️ CNC AI — Modular Stable 3.0
+  </header>
 
-        <div class="grid">
-            <!-- اللوحة اليسرى -->
-            <div class="panel left-panel">
-                <!-- عناصر تحميل الملفات -->
-                <!-- أزرار التبويبات -->
-                <!-- محتويات التبويبات -->
-            </div>
-
-            <!-- اللوحة اليمنى -->
-            <div class="panel right-panel">
-                <!-- إعدادات الماكينة -->
-                <!-- إعدادات متقدمة -->
-                <!-- مخرجات G-code -->
-            </div>
-        </div>
+  <main style="padding:15px;text-align:center">
+    <input type="file" id="imgInput" accept="image/*"><br>
+    <div class="tabs" style="margin-top:10px;">
+      <button class="active" data-tab="original">الأصلية</button>
+      <button data-tab="heatmap">Heatmap</button>
+      <button data-tab="gcode">G-code</button>
+      <button data-tab="simulation">3D</button>
     </div>
 
-    <!-- المكونات الإضافية -->
-    <div class="progress-overlay" id="progressOverlay">
-        <div class="progress-spinner"></div>
-        <div class="progress-text" id="progressText">جاري المعالجة...</div>
+    <div id="tab-original" class="tab-content active">
+      <canvas id="canvasOriginalView" width="512" height="512"></canvas>
     </div>
-
-    <!-- نظام التصحيح -->
-    <div id="cnc-debug-overlay" class="collapsed">
-        <!-- محتوى نظام التصحيح -->
+    <div id="tab-heatmap" class="tab-content">
+      <div class="colormap-buttons" style="margin:6px 0">
+        <button data-map="jet">Jet</button>
+        <button data-map="hot">Hot</button>
+        <button data-map="cool">Cool</button>
+        <button data-map="gray">Gray</button>
+      </div>
+      <canvas id="canvasHeatmap" width="512" height="512"></canvas>
     </div>
-    <button id="cnc-debug-btn" aria-label="Open debug">🐞</button>
+    <div id="tab-gcode" class="tab-content">
+      <button id="btnGen">توليد G-code</button><br>
+      <textarea id="gcodeOut" readonly style="width:95%;height:160px;"></textarea>
+    </div>
+    <div id="tab-simulation" class="tab-content">
+      <button id="btnSim">تشغيل المحاكاة</button>
+      <button id="btnRotate">↻ تدوير</button>
+      <button id="btnZoomIn">➕ تقريب</button>
+      <button id="btnZoomOut">➖ إبعاد</button>
+      <div id="sim3d" style="width:100%;height:400px;margin-top:10px"></div>
+    </div>
+  </main>
 
-    <div id="toast"></div>
+  <div id="progressOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;font-size:18px;color:#fff">
+    🔄 جاري المعالجة...
+  </div>
 
-    <!-- السكربتات -->
-    <script src="js/utils.js"></script>
-    <script src="js/debug-system.js"></script>
-    <script src="js/opencv-handler.js"></script>
-    <script src="js/file-handlers.js"></script>
-    <script src="js/gcode-generator.js"></script>
-    <script src="js/three-viewer.js"></script>
-    <script src="js/simulation.js"></script>
-    <script src="js/main.js"></script>
+  <!-- Helpers -->
+  <script src="js/helpers/utils.js"></script>
+  <script src="js/helpers/validators.js"></script>
+
+  <!-- Core -->
+  <script src="js/core/debugOverlay.js"></script>
+  <script src="js/core/taskManager.js"></script>
+  <script src="js/core/memoryManager.js"></script>
+
+  <!-- CV -->
+  <script src="js/cv/cv-processing.js"></script>
+
+  <!-- G-code -->
+  <script src="js/gcode/gcode-generator.js"></script>
+
+  <!-- 3D -->
+  <script src="js/three/simulation3d.js"></script>
+
+  <!-- UI -->
+  <script src="js/ui/ui-controls.js"></script>
+  <script src="js/ui/ui-init.js"></script>
+
+  <!-- Start -->
+  <script>
+    document.addEventListener("DOMContentLoaded", initApp);
+  </script>
 </body>
 </html>
